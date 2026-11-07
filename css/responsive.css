@@ -1,0 +1,194 @@
+/* ====================================================================
+   DIWALI SURPRISE — RESPONSIVE & MOBILE-FIRST OPTIMIZATIONS
+   Tested on 320px, 375px, 430px, 768px, 1024px, 1440px
+   Author: Jaswant Yadav (@jaswant_0707)
+   ==================================================================== */
+
+/* Touch Target Ergonomics */
+button, input, select, textarea, a {
+  touch-action: manipulation;
+}
+
+/* Tablets (max-width: 768px) */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 20px 10px 30px;
+  }
+
+  .festive-stage {
+    gap: 24px;
+  }
+
+  .lantern {
+    width: 26px;
+    height: 42px;
+  }
+
+  .diya-base {
+    width: 38px;
+    height: 16px;
+  }
+
+  .diya-flame {
+    width: 15px;
+    height: 24px;
+  }
+
+  .social-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .copy-link-bar {
+    flex-direction: column;
+  }
+
+  .btn-copy {
+    width: 100%;
+  }
+
+  .greeting-overlay {
+    top: 10%;
+    width: 94%;
+    padding: 22px 16px;
+  }
+
+  .greeting-title {
+    font-size: 1.8rem;
+  }
+
+  .greeting-quote {
+    font-size: 1.4rem;
+  }
+
+  .sender-message-text {
+    font-size: 0.95rem;
+  }
+
+  .bottom-bar {
+    bottom: 16px;
+    width: 94%;
+  }
+
+  .btn-create-others {
+    padding: 14px 20px;
+    font-size: 1rem;
+  }
+
+  .modal-dialog {
+    padding: 20px 16px;
+  }
+}
+
+/* Smartphone Screens (max-width: 430px) */
+@media (max-width: 430px) {
+  .app-header {
+    padding: 14px 16px;
+  }
+
+  .brand-logo {
+    font-size: 1.1rem;
+  }
+
+  .create-card, .result-card {
+    padding: 20px 16px;
+    border-radius: var(--radius-md);
+  }
+
+  .hero-title {
+    font-size: 1.85rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.92rem;
+    margin-bottom: 20px;
+  }
+
+  .gift-box-wrapper {
+    width: 110px;
+    height: 110px;
+  }
+
+  .gift-body {
+    height: 75px;
+  }
+
+  .gift-lid {
+    height: 30px;
+    top: 12px;
+  }
+
+  .btn-open-surprise {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 1.1rem;
+  }
+
+  .social-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .social-btn {
+    padding: 10px 8px;
+    font-size: 0.82rem;
+  }
+}
+
+/* Small Smartphone Screens (max-width: 360px - e.g. iPhone SE / Galaxy Mini) */
+@media (max-width: 360px) {
+  .hero-title {
+    font-size: 1.65rem;
+  }
+
+  .festive-stage {
+    gap: 14px;
+  }
+
+  .lantern {
+    display: none; /* Hide lanterns on very tight screens to prioritize diyas */
+  }
+
+  .social-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Large Screens (min-width: 1024px) */
+@media (min-width: 1024px) {
+  .main-content {
+    padding-top: 40px;
+  }
+
+  .hero-section {
+    padding-bottom: 50px;
+  }
+
+  .social-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Accessibility: Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .diwali-stars {
+    animation: none;
+  }
+
+  .lantern {
+    animation: none;
+  }
+
+  .diya-flame {
+    animation: none;
+  }
+
+  .btn-open-surprise {
+    animation: none;
+  }
+}

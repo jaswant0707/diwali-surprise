@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Diwali Surprise ✨ | Personalized Diwali Wishes & Link Generator</title>
+  
+  <meta name="description" content="Send someone you love a magical Diwali surprise with glowing diyas, beautiful music, personalized messages, and an interactive fireworks celebration!">
+  <meta name="keywords" content="Diwali surprise, personalized Diwali wishes, Diwali greetings generator, Happy Diwali, Diwali celebration">
+  <meta name="author" content="Jaswant Yadav (@jaswant_0707)">
+  <meta name="theme-color" content="#050714">
+
+  <!-- Open Graph / WhatsApp / Facebook Preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Make This Diwali Unforgettable ✨ | Diwali Surprise">
+  <meta property="og:description" content="Send someone you love a magical personalized Diwali surprise filled with lights and fireworks!">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1200&q=80">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Diwali Surprise ✨ | Personalized Diwali Wishes">
+  <meta name="twitter:description" content="Create an unforgettable Diwali greeting with interactive fireworks and personal wishes.">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1200&q=80">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/create.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <!-- Background Atmosphere -->
+  <div class="diwali-bg"></div>
+  <div class="diwali-stars"></div>
+
+  <div class="page-wrapper">
+    <!-- Header -->
+    <header class="app-header">
+      <a href="index.html" class="brand-logo">
+        <div class="diya-container" style="transform: scale(0.65); margin-right: -4px;">
+          <div class="diya-flame"></div>
+          <div class="diya-base"></div>
+        </div>
+        <span>Diwali Surprise</span>
+      </a>
+      <nav class="nav-links">
+        <a href="index.html" class="nav-link" style="color: var(--gold-300); font-weight: 600;">Create</a>
+        <a href="feedback.html" class="nav-link">Feedback</a>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <div class="festive-badge">✨ Festival of Lights 2026</div>
+        <h1 class="hero-title">Make This Diwali <span class="text-gold text-glow">Unforgettable</span> ✨</h1>
+        <p class="hero-subtitle">Send someone you love a magical Diwali surprise, filled with lights, happiness and beautiful memories.</p>
+
+        <!-- Festive Stage with Hanging Lanterns & Glowing Diyas -->
+        <div class="festive-stage">
+          <div class="lantern"></div>
+          <div class="diya-container">
+            <div class="diya-flame"></div>
+            <div class="diya-base"></div>
+          </div>
+          <div class="diya-container" style="transform: scale(1.15);">
+            <div class="diya-flame"></div>
+            <div class="diya-base"></div>
+          </div>
+          <div class="diya-container">
+            <div class="diya-flame"></div>
+            <div class="diya-base"></div>
+          </div>
+          <div class="lantern"></div>
+        </div>
+      </section>
+
+      <!-- Sender Form Card -->
+      <section class="create-card glass-card">
+        <div class="form-header">
+          <h2>Create Your Diwali Surprise</h2>
+          <p>Personalize this special gift in less than a minute</p>
+        </div>
+
+        <form id="create-greeting-form" novalidate>
+          <!-- Field 1: Recipient Name -->
+          <div class="form-group" id="name-form-group">
+            <label class="form-label" for="recipient-name">
+              <span>Recipient's Name <span class="required">*</span></span>
+            </label>
+            <input 
+              type="text" 
+              id="recipient-name" 
+              class="form-input" 
+              placeholder="Enter their beautiful name..." 
+              maxlength="100" 
+              required 
+              autocomplete="off"
+            >
+            <div class="form-error-msg">Please enter the recipient's name to continue.</div>
+          </div>
+
+          <!-- Field 2: Personal Message (Optional) -->
+          <div class="form-group" id="msg-form-group">
+            <label class="form-label" for="personal-message">
+              <span>Personal Message <span style="font-size: 0.8rem; opacity: 0.8;">(Optional)</span></span>
+              <span class="char-counter" id="msg-char-counter">0 / 500</span>
+            </label>
+            <textarea 
+              id="personal-message" 
+              class="form-textarea" 
+              placeholder="Write something special for them..." 
+              maxlength="500"
+            ></textarea>
+            <div class="form-error-msg">Message must be 500 characters or fewer.</div>
+          </div>
+
+          <!-- Generate Button -->
+          <button type="submit" id="btn-generate" class="btn-gold btn-generate">
+            ✨ Generate Surprise Link
+          </button>
+        </form>
+      </section>
+
+      <!-- Result Card (Populated upon link creation) -->
+      <section id="result-card" class="result-card glass-card">
+        <div class="result-header">
+          <div style="font-size: 2.4rem; margin-bottom: 6px;">🪔</div>
+          <h3>Your Diwali Surprise Is Ready!</h3>
+          <p>Share this magical link with them now and make them smile.</p>
+        </div>
+
+        <!-- Greeting Preview Snippet -->
+        <div class="preview-snippet">
+          <div class="preview-badge">Personalized Surprise For</div>
+          <div class="preview-text" id="preview-recipient-name">Friend</div>
+          <div class="preview-msg" id="preview-personal-msg"></div>
+        </div>
+
+        <!-- Link Copy Bar -->
+        <div class="copy-link-bar">
+          <input type="text" id="generated-link-input" class="link-input" readonly>
+          <button type="button" id="btn-copy-link" class="btn-gold btn-copy">
+            📋 Copy Link
+          </button>
+        </div>
+
+        <!-- Social Sharing Grid -->
+        <div class="share-section-title">Share Instantly Via</div>
+        <div class="social-grid">
+          <!-- WhatsApp -->
+          <button type="button" id="btn-share-whatsapp" class="social-btn btn-wa">
+            <svg viewBox="0 0 24 24"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.03-1.25-.75-.67-1.26-1.5-1.41-1.75-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1s.9 2.44 1.03 2.61c.13.17 1.77 2.7 4.29 3.79.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.12-.22-.19-.47-.32"/></svg>
+            WhatsApp
+          </button>
+
+          <!-- Instagram -->
+          <button type="button" id="btn-share-instagram" class="social-btn btn-ig">
+            <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            Instagram
+          </button>
+
+          <!-- Facebook -->
+          <button type="button" id="btn-share-facebook" class="social-btn btn-fb">
+            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </button>
+
+          <!-- Telegram -->
+          <button type="button" id="btn-share-telegram" class="social-btn btn-tg">
+            <svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            Telegram
+          </button>
+
+          <!-- X (Twitter) -->
+          <button type="button" id="btn-share-x" class="social-btn btn-x">
+            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            X (Twitter)
+          </button>
+
+          <!-- SMS -->
+          <button type="button" id="btn-share-sms" class="social-btn btn-sms">
+            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM9 11H7V9h2v2zm4 0h-2V9h2v2zm4 0h-2V9h2v2z"/></svg>
+            SMS
+          </button>
+
+          <!-- Email -->
+          <button type="button" id="btn-share-email" class="social-btn btn-email">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            Email
+          </button>
+
+          <!-- Native Share Sheet -->
+          <button type="button" id="btn-share-native" class="social-btn btn-native">
+            <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92c0-1.61-1.31-2.92-2.92-2.92z"/></svg>
+            More Sharing Options
+          </button>
+        </div>
+
+        <!-- Action Links -->
+        <div class="action-links">
+          <a id="btn-preview-link" href="#" target="_blank" class="btn-secondary">
+            🎁 Open & Experience Surprise
+          </a>
+          <button type="button" onclick="document.getElementById('create-greeting-form').reset(); document.getElementById('recipient-name').focus();" class="btn-secondary">
+            ➕ Create Another
+          </button>
+        </div>
+      </section>
+
+      <!-- About Section -->
+      <section class="about-section glass-card">
+        <h3>About This Little Celebration</h3>
+        <p>This platform was created to make Diwali wishes more personal, memorable, and joyful. Create a special greeting, share a magical surprise, and spread happiness with the people who matter.</p>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div class="footer-creator">
+        Created with ❤️ by <a href="https://www.instagram.com/jaswant_0707/" target="_blank" rel="noopener noreferrer">Jaswant Yadav</a> (@jaswant_0707)
+      </div>
+      <div class="footer-links">
+        <a href="https://www.instagram.com/jaswant_0707/" target="_blank" rel="noopener noreferrer">Instagram</a>
+        <a href="feedback.html">Feedback & Rating</a>
+        <button type="button" id="btn-privacy-modal">Privacy Policy</button>
+        <button type="button" id="btn-terms-modal">Terms of Service</button>
+      </div>
+      <div class="footer-copyright">
+        © 2026 Jaswant Yadav. Made with ❤️ and festive lights.
+      </div>
+    </footer>
+  </div>
+
+  <!-- Privacy Policy Modal -->
+  <div id="privacy-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Privacy Policy</h3>
+        <button type="button" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>Your privacy is important to us. This platform does not require any account creation or personal login.</p>
+        <h4>Greetings Data</h4>
+        <p>The recipient names and optional personal messages you create are stored securely in Supabase PostgreSQL solely to render the greeting to anyone holding the unique link.</p>
+        <h4>Feedback Contact Details</h4>
+        <p>Your contact details provided in feedback (such as email or optional phone) are collected strictly to manage feedback and improve this platform. They are protected by Row Level Security (RLS) and will never be displayed publicly.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Terms Modal -->
+  <div id="terms-modal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3 class="modal-title">Terms & Conditions</h3>
+        <button type="button" class="modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>By using this website, you agree to spread positivity, festive joy, and kind wishes.</p>
+        <h4>Acceptable Use</h4>
+        <p>Please refrain from submitting offensive, defamatory, abusive, or harmful messages. We reserve the right to deactivate any greeting links that violate these terms.</p>
+        <h4>Intellectual Property</h4>
+        <p>© 2026 Jaswant Yadav. All rights reserved.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supabase CDN (with transparent local storage fallback) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Application Scripts -->
+  <script src="js/config.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/sharing.js"></script>
+  <script src="js/generator.js"></script>
+</body>
+</html>

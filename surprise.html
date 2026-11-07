@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>A Diwali Surprise for You! 🎁✨</title>
+  
+  <meta name="description" content="Someone sent you an exclusive Diwali surprise filled with festive lights, fireworks, and heartfelt wishes!">
+  <meta name="theme-color" content="#03050d">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="A Special Diwali Surprise for You! 💝✨">
+  <meta property="og:description" content="Open your personalized Diwali surprise filled with fireworks, glowing lights, and warm festive wishes.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=1200&q=80">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/surprise.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="surprise-page">
+
+  <!-- ================================================================== -->
+  <!-- 1. INVITATION & GIFT OPENING SCREEN (STAGE 1) -->
+  <!-- ================================================================== -->
+  <section id="invitation-screen" class="invitation-screen">
+    <div class="invitation-header">
+      <div id="invitation-recipient-badge" class="recipient-badge">
+        Especially for You ✨
+      </div>
+      <h1 class="invitation-title">Someone Has a Special Surprise for You! 💝</h1>
+      <p class="invitation-subtitle">A little light, a little happiness, and a special message just for you.</p>
+    </div>
+
+    <!-- 3D Gift Box Scene flanked by Glowing Diyas -->
+    <div class="gift-scene">
+      <!-- Left Glowing Diya -->
+      <div class="diya-container">
+        <div class="diya-flame"></div>
+        <div class="diya-base"></div>
+      </div>
+
+      <!-- 3D Festive Golden Gift Box -->
+      <div id="gift-box-wrapper" class="gift-box-wrapper" title="Click to open your surprise!">
+        <div class="gift-box">
+          <div class="gift-bow">
+            <div class="bow-loop-left"></div>
+            <div class="bow-loop-right"></div>
+            <div class="bow-center"></div>
+          </div>
+          <div class="gift-lid"></div>
+          <div class="gift-body"></div>
+        </div>
+      </div>
+
+      <!-- Right Glowing Diya -->
+      <div class="diya-container">
+        <div class="diya-flame"></div>
+        <div class="diya-base"></div>
+      </div>
+    </div>
+
+    <!-- Primary Interaction Action Button -->
+    <button type="button" id="btn-open-surprise" class="btn-gold btn-open-surprise">
+      🎁 Open the Surprise
+    </button>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- 2. FULLSCREEN CELEBRATION STAGE (STAGE 2 & 3) -->
+  <!-- ================================================================== -->
+  <section class="celebration-screen">
+    <!-- Sound and Fullscreen Controls (Top Right) -->
+    <div class="celebration-controls">
+      <button type="button" id="btn-sound-toggle" class="control-btn" title="Toggle Sound">
+        <!-- Sound On Icon -->
+        <svg id="icon-sound-on" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+        <!-- Sound Off Icon -->
+        <svg id="icon-sound-off" style="display: none;" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+      </button>
+    </div>
+
+    <!-- Fireworks Dual Canvas Container -->
+    <div class="stage-container">
+      <div class="canvas-container">
+        <canvas id="trails-canvas"></canvas>
+        <canvas id="main-canvas"></canvas>
+      </div>
+    </div>
+
+    <!-- Floating Personalized Greeting Overlay Card -->
+    <div id="greeting-overlay" class="greeting-overlay glass-card">
+      <h2 id="celebration-recipient-title" class="greeting-title">
+        ✨ Happy Diwali! ✨
+      </h2>
+      <div class="greeting-quote">
+        May your life shine brighter than a thousand diyas.
+      </div>
+      
+      <!-- Personal Message (Hidden if empty) -->
+      <div id="sender-message-box" class="sender-message-box" style="display: none;">
+        <div class="sender-message-label">Special Message for You</div>
+        <p id="sender-message-text" class="sender-message-text"></p>
+      </div>
+    </div>
+
+    <!-- Bottom Bar: Create for Others Button -->
+    <div id="bottom-bar" class="bottom-bar">
+      <a href="index.html" class="btn-gold btn-create-others">
+        💝 Create for Others
+      </a>
+    </div>
+  </section>
+
+  <!-- ================================================================== -->
+  <!-- 3. FRIENDLY ERROR SCREEN (FOR INVALID OR EXPIRED LINKS) -->
+  <!-- ================================================================== -->
+  <section id="error-screen" class="error-screen" style="display: none;">
+    <div class="error-card glass-card">
+      <div style="font-size: 3rem; margin-bottom: 12px;">🪔</div>
+      <h2 id="error-title">Greeting Not Found</h2>
+      <p id="error-message">This Diwali surprise link may be invalid or expired. But don't worry, you can easily create a new surprise right now!</p>
+      <a href="index.html" class="btn-gold">
+        ✨ Create a Diwali Surprise
+      </a>
+    </div>
+  </section>
+
+  <!-- Supabase Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Dependencies -->
+  <script src="js/fscreen.js"></script>
+  <script src="js/Stage.js"></script>
+  <script src="js/MyMath.js"></script>
+  <!-- Application Modules -->
+  <script src="js/config.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/sound.js"></script>
+  <script src="js/fireworks.js"></script>
+  <script src="js/receiver.js"></script>
+</body>
+</html>
