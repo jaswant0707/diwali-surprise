@@ -70,3 +70,4 @@ const MyMath = (function MyMathFactory(Math) {
 	return MyMath;
 
 })(Math);
+window.MyMath = MyMath;

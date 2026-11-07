@@ -89,3 +89,13 @@
 - [x] Verify link persistence across browser refreshes and private sessions
 - [x] Verify zero console errors, zero layout shifts, and high performance
 - [x] Complete `README.md` with setup, architecture, and Supabase SQL instructions
+
+## Phase 12: Continuous Fireworks & Web Audio Engine Restoration (Urgent Fix)
+- [x] Diagnose root cause of fireworks failure (`Stage.js` / `MyMath.js` lexical scope preventing `window.Stage` export)
+- [x] Restore complete original Caleb Miller canvas fireworks engine with dual canvases (`#trails-canvas`, `#main-canvas`), particle pooling (`Star`, `Spark`, `BurstFlash`), and full palette of 11 shell types
+- [x] Restore continuous `autoLaunchTime` sequence loop so fireworks explode continuously without stopping after 2-3 seconds
+- [x] Synchronize Web Audio sound effects (`lift`, `burst`, `burstSmall`, `crackle`, `crackleSmall`) across all continuous explosions
+- [x] Ensure foreground greeting card and "Create for Others" button remain readable and interactive above background canvas
+- [x] Implement canvas pointer/touch interaction allowing users to tap on canvas to launch custom fireworks
+- [x] Complete automated 60-second headless Chrome verification test: 60s continuous celebration, zero console errors, active particles and 60fps frame advancement
+

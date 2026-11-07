@@ -63,3 +63,5 @@
   
   global.fscreen = fscreen;
 })(window);
+
+window.fscreen = fscreen;

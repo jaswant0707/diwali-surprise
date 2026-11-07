@@ -1,6 +1,6 @@
 /**
  * Diwali Surprise - Receiver Experience Controller
- * Orchestrates Gift Box opening, Web Audio unlock on interaction, and full-screen Fireworks celebration
+ * Orchestrates Gift Box opening, Web Audio unlock on interaction, and continuous Fireworks celebration
  * Author: Jaswant Yadav (@jaswant_0707)
  */
 
@@ -10,13 +10,41 @@
   let greetingData = null;
   let isCelebrationStarted = false;
 
-  document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Initialize Canvas Fireworks Engine
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Initialize Canvas Fireworks Engine immediately
     if (window.FireworksEngine) {
       window.FireworksEngine.init();
     }
 
-    // 2. Fetch Greeting from Supabase by URL query parameter
+    // 2. Immediately bind interaction events to Open Button & Gift Box
+    bindOpenEvents();
+
+    // 3. Fetch Greeting from Supabase by URL query parameter
+    loadGreetingData();
+  });
+
+  function bindOpenEvents() {
+    const openBtn = document.getElementById('btn-open-surprise');
+    const giftBox = document.getElementById('gift-box-wrapper');
+    const soundBtn = document.getElementById('btn-sound-toggle');
+
+    if (openBtn) {
+      openBtn.addEventListener('click', startCelebration);
+    }
+    if (giftBox) {
+      giftBox.addEventListener('click', startCelebration);
+    }
+
+    if (soundBtn) {
+      soundBtn.addEventListener('click', () => {
+        if (!window.FireworksEngine) return;
+        const soundEnabled = window.FireworksEngine.toggleSound();
+        updateSoundIcon(!soundEnabled);
+      });
+    }
+  }
+
+  async function loadGreetingData() {
     const urlParams = new URLSearchParams(window.location.search);
     const greetingId = urlParams.get('id');
 
@@ -32,23 +60,21 @@
         return;
       }
 
-      setupInvitation(greetingData);
+      applyGreetingToDOM(greetingData);
     } catch (err) {
-      console.error('Failed to load greeting:', err);
-      showErrorScreen('Unable to Load Surprise', 'A network error occurred while loading this greeting. Please check your connection and refresh.');
+      console.warn('Network issue loading greeting, checking cache:', err);
+      if (!greetingData) {
+        showErrorScreen('Unable to Load Surprise', 'A network error occurred while loading this greeting. Please check your connection and refresh.');
+      }
     }
-  });
+  }
 
-  function setupInvitation(greeting) {
+  function applyGreetingToDOM(greeting) {
     const recipientBadge = document.getElementById('invitation-recipient-badge');
     const greetingTitle = document.getElementById('celebration-recipient-title');
     const senderMsgBox = document.getElementById('sender-message-box');
     const senderMsgText = document.getElementById('sender-message-text');
-    const openBtn = document.getElementById('btn-open-surprise');
-    const giftBox = document.getElementById('gift-box-wrapper');
-    const soundBtn = document.getElementById('btn-sound-toggle');
 
-    // Update dynamic texts using safe textContent (prevents XSS)
     if (recipientBadge) {
       recipientBadge.textContent = `Especially for ${greeting.recipientName} ✨`;
     }
@@ -65,67 +91,37 @@
         senderMsgBox.style.display = 'none';
       }
     }
-
-    // Sound toggle listener
-    if (soundBtn) {
-      soundBtn.addEventListener('click', () => {
-        if (!window.SoundEngine) return;
-        const muted = window.SoundEngine.toggleMute();
-        updateSoundIcon(muted);
-      });
-    }
-
-    // Interaction triggers: Click Open Button OR Click Gift Box
-    if (openBtn) {
-      openBtn.addEventListener('click', startCelebration);
-    }
-    if (giftBox) {
-      giftBox.addEventListener('click', startCelebration);
-    }
   }
 
-  async function startCelebration() {
+  function startCelebration() {
     if (isCelebrationStarted) return;
     isCelebrationStarted = true;
 
-    // STEP 1: Unlock Web Audio API directly inside user click handler
-    if (window.SoundEngine) {
-      try {
-        await window.SoundEngine.unlockAudio();
-      } catch (e) {
-        console.warn('Audio unlock handled with fallback:', e);
-      }
-    }
-
-    // STEP 2: Gift box opening animation
+    // STEP 1: Gift box opening animation
     const giftBox = document.getElementById('gift-box-wrapper');
     if (giftBox) {
       giftBox.classList.add('opening');
     }
 
-    // STEP 3: Smooth transition into celebration
+    // STEP 2: Transition into celebration
     setTimeout(() => {
       const invitationScreen = document.getElementById('invitation-screen');
       if (invitationScreen) {
         invitationScreen.classList.add('opened');
       }
 
-      // STEP 4: Start fireworks engine
+      // STEP 3: Start original fireworks engine (unpauses & starts continuous autoLaunch loop)
       if (window.FireworksEngine) {
         window.FireworksEngine.start();
-        // Trigger initial celebratory finale burst
-        setTimeout(() => {
-          window.FireworksEngine.triggerFinale();
-        }, 600);
       }
 
-      // STEP 5: Reveal personalized greeting card
+      // STEP 4: Reveal personalized greeting card & bottom CTA
       setTimeout(() => {
         const greetingOverlay = document.getElementById('greeting-overlay');
         const bottomBar = document.getElementById('bottom-bar');
         if (greetingOverlay) greetingOverlay.classList.add('visible');
         if (bottomBar) bottomBar.classList.add('visible');
-      }, 700);
+      }, 500);
     }, 450);
   }
 

@@ -280,3 +280,5 @@ const Stage = (function StageFactory(window, document, Ticker) {
 	return Stage;
 
 })(window, document, Ticker);
+
+window.Stage = Stage;
