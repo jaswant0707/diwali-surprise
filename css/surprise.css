@@ -26,7 +26,31 @@
   text-align: center;
   z-index: 50;
   transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
-  background: radial-gradient(circle at 50% 40%, #151d3b 0%, #080d21 55%, #020308 100%);
+  background: radial-gradient(circle at 50% 38%, rgba(35, 25, 65, 0.9) 0%, rgba(14, 18, 42, 0.95) 45%, #050714 85%, #020308 100%);
+  overflow: hidden;
+}
+
+/* Radiant Ambient Golden Spotlight behind Gift */
+.invitation-screen::before {
+  content: '';
+  position: absolute;
+  width: clamp(280px, 60vw, 440px);
+  height: clamp(280px, 60vw, 440px);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 179, 0, 0.22) 0%, rgba(255, 111, 0, 0.08) 50%, transparent 75%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -45%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(25px);
+  animation: goldenAura 6s ease-in-out infinite alternate;
+}
+
+@keyframes goldenAura {
+  0% { transform: translate(-50%, -45%) scale(0.92); opacity: 0.7; }
+  50% { transform: translate(-50%, -45%) scale(1.12); opacity: 1; }
+  100% { transform: translate(-50%, -45%) scale(0.92); opacity: 0.7; }
 }
 
 .invitation-screen.opened {
@@ -36,36 +60,42 @@
 }
 
 .invitation-header {
+  position: relative;
+  z-index: 1;
   margin-bottom: 24px;
   max-width: 580px;
 }
 
 .recipient-badge {
   display: inline-block;
-  padding: 6px 18px;
-  background: rgba(255, 193, 7, 0.15);
-  border: 1px solid var(--gold-400);
+  padding: 7px 22px;
+  background: rgba(255, 193, 7, 0.14);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 213, 79, 0.5);
   border-radius: var(--radius-full);
-  color: var(--gold-300);
+  color: var(--gold-200);
   font-size: 0.95rem;
   font-weight: 600;
   margin-bottom: 16px;
-  box-shadow: 0 0 15px rgba(255, 193, 7, 0.25);
-  animation: pulse 2s infinite ease-in-out;
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.03em;
+  animation: badgeShimmer 3s infinite ease-in-out;
 }
 
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.04); box-shadow: 0 0 25px rgba(255, 193, 7, 0.45); }
+@keyframes badgeShimmer {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 18px rgba(255, 193, 7, 0.25); }
+  50% { transform: scale(1.03); box-shadow: 0 0 30px rgba(255, 193, 7, 0.45); border-color: rgba(255, 235, 59, 0.8); }
 }
 
 .invitation-title {
   font-family: var(--font-serif);
-  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-size: clamp(1.8rem, 5vw, 2.9rem);
   font-weight: 700;
   line-height: 1.25;
   color: #ffffff;
   margin-bottom: 12px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5), 0 0 22px rgba(255, 202, 40, 0.25);
 }
 
 .invitation-subtitle {
@@ -76,11 +106,13 @@
 
 /* Stage with Diyas and Gift Box */
 .gift-scene {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: clamp(20px, 8vw, 60px);
-  margin: 30px 0 40px;
+  margin: 28px 0 38px;
   perspective: 1000px;
 }
 
@@ -91,10 +123,16 @@
   height: 140px;
   cursor: pointer;
   transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: gentleFloat 4s ease-in-out infinite alternate;
+}
+
+@keyframes gentleFloat {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-7px); }
 }
 
 .gift-box-wrapper:hover {
-  transform: scale(1.06);
+  transform: scale(1.08) translateY(-4px);
 }
 
 .gift-box-wrapper:active {
@@ -114,10 +152,10 @@
   left: 0;
   width: 100%;
   height: 95px;
-  background: linear-gradient(135deg, #d48b08 0%, #ffc107 50%, #b27300 100%);
+  background: linear-gradient(135deg, #ffe082 0%, #ffb300 40%, #ff8f00 70%, #c47600 100%);
   border-radius: 12px;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7), 0 0 35px rgba(255, 193, 7, 0.4);
-  border: 1px solid rgba(255, 235, 59, 0.6);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75), 0 0 40px rgba(255, 179, 0, 0.45), inset 0 2px 4px rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   overflow: hidden;
 }
 
@@ -143,9 +181,9 @@
   left: -8px;
   width: calc(100% + 16px);
   height: 38px;
-  background: linear-gradient(135deg, #e69d0d 0%, #ffd54f 50%, #c48206 100%);
+  background: linear-gradient(135deg, #fff3b0 0%, #ffc107 45%, #ff8f00 80%, #d87e00 100%);
   border-radius: 8px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 193, 7, 0.5);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 193, 7, 0.5), inset 0 2px 3px rgba(255, 255, 255, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.6);
   z-index: 10;
   transition: transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55), opacity 0.4s;
@@ -182,9 +220,9 @@
   width: 28px;
   height: 22px;
   border: 4px solid #d32f2f;
-  background: rgba(229, 57, 53, 0.8);
+  background: rgba(229, 57, 53, 0.85);
   border-radius: 50% 50% 20% 50%;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
 }
 
 .bow-loop-left {
@@ -222,12 +260,30 @@
 
 /* Primary Open Button */
 .btn-open-surprise {
-  padding: 18px 42px;
+  position: relative;
+  z-index: 1;
+  padding: 18px 46px;
   font-size: 1.25rem;
   font-weight: 700;
-  letter-spacing: 0.02em;
-  box-shadow: 0 6px 30px rgba(255, 179, 0, 0.5), inset 0 2px 2px rgba(255, 255, 255, 0.7);
-  animation: bounceBtn 2.2s infinite;
+  letter-spacing: 0.03em;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, #ffe082 0%, #ffca28 30%, #ffa000 70%, #ff8f00 100%);
+  box-shadow: 0 8px 32px rgba(255, 179, 0, 0.55), 0 0 25px rgba(255, 193, 7, 0.35), inset 0 2px 2px rgba(255, 255, 255, 0.7);
+  color: #3e2700;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  border: none;
+  cursor: pointer;
+  animation: bounceBtn 2.4s infinite;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.btn-open-surprise:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 12px 40px rgba(255, 179, 0, 0.7), 0 0 35px rgba(255, 193, 7, 0.5);
+}
+
+.btn-open-surprise:active {
+  transform: translateY(1px) scale(0.98);
 }
 
 @keyframes bounceBtn {
@@ -273,8 +329,9 @@
   pointer-events: auto;
 }
 
-/* Personalized Greeting Overlay Card */
-.greeting-overlay {
+/* Personalized Greeting Overlay Card (Wish Box 1) */
+.greeting-overlay,
+.greeting-overlay.glass-card {
   position: absolute;
   top: 15%;
   left: 50%;
@@ -288,11 +345,25 @@
   opacity: 0;
   transform: translateX(-50%) translateY(30px) scale(0.95);
   transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Transparent Glassmorphism - Fireworks shine through */
+  background: rgba(15, 20, 42, 0.48);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 193, 64, 0.35);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 0 28px rgba(255, 193, 64, 0.16), inset 0 1px 1px rgba(255, 255, 255, 0.12);
 }
 
 .greeting-overlay.visible {
   opacity: 1;
   transform: translateX(-50%) translateY(0) scale(1);
+}
+
+.greeting-overlay:hover,
+.greeting-overlay.glass-card:hover {
+  border-color: rgba(255, 213, 79, 0.5);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55), 0 0 35px rgba(255, 193, 64, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.18);
 }
 
 .greeting-title {
@@ -313,13 +384,16 @@
   margin-bottom: 18px;
 }
 
+/* Special Message for You Card (Wish Box 2) */
 .sender-message-box {
-  background: rgba(8, 12, 28, 0.75);
-  border: 1px solid var(--border-glow);
+  background: rgba(10, 15, 32, 0.42);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 193, 64, 0.3);
   border-radius: var(--radius-md);
   padding: 16px 20px;
   margin-top: 16px;
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), 0 0 18px rgba(255, 193, 64, 0.12), inset 0 1px 1px rgba(255, 255, 255, 0.08);
 }
 
 .sender-message-label {
