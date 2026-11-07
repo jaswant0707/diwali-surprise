@@ -345,6 +345,11 @@
   opacity: 0;
   transform: translateX(-50%) translateY(30px) scale(0.95);
   transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Transparent Glassmorphism - Fireworks shine through */
+  background: rgba(15, 20, 42, 0.48);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
   border: 1px solid rgba(255, 193, 64, 0.35);
   border-radius: var(--radius-lg);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45), 0 0 28px rgba(255, 193, 64, 0.16), inset 0 1px 1px rgba(255, 255, 255, 0.12);
@@ -381,8 +386,9 @@
 
 /* Special Message for You Card (Wish Box 2) */
 .sender-message-box {
+  background: rgba(10, 15, 32, 0.42);
   backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(2px);
   border: 1px solid rgba(255, 193, 64, 0.3);
   border-radius: var(--radius-md);
   padding: 16px 20px;
