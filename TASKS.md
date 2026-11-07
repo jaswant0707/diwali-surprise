@@ -109,5 +109,9 @@
 - [x] Guaranteed explosion sound playback for all primary firework bursts via `!this.isSubBurst` check
 - [x] Accelerated autoLaunch cadence from 3-4s down to 750-2200ms with a 3-shell celebratory opening burst for a lively, non-stop Diwali fireworks show
 - [x] Verified complete flow with automated end-to-end tests: 0 console errors, high particle activity (>5000 sparks, >1200 stars), and responsive mobile ergonomics
-
-
+## Phase 14: Autonomous Self-Healing Fireworks Engine & Cache Invalidation
+- [x] Diagnosed console error `❌ Stage.js is required for FireworksEngine.` seen on Netlify live deployment caused by stale browser/CDN caching of previous build
+- [x] Embedded full self-healing fallback implementations of `MyMath`, `Ticker`, and `Stage` directly inside `js/fireworks.js` so the fireworks engine can never fail due to missing or delayed dependencies
+- [x] Configured `netlify.toml` with strict `no-cache, no-store, must-revalidate` headers for `/js/*`, `/css/*`, and `/*.html` to prevent Netlify edge caching from serving outdated code
+- [x] Added `?v=20261107-3` cache buster parameter to all script tags across `surprise.html`, `index.html`, and `feedback.html`
+- [x] Verified zero console errors and 25s+ continuous celebration with high frame counts and active particle systems via `test_complete_audit.js`

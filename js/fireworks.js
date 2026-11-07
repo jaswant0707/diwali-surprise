@@ -8,10 +8,193 @@
 (function () {
   'use strict';
 
-  // Ensure dependencies are accessible
-  const Stage = window.Stage;
-  const MyMath = window.MyMath;
-  const fscreen = window.fscreen;
+  // Self-healing MyMath helper
+  const MyMath = window.MyMath || (function (Math) {
+    const M = {};
+    M.toDeg = 180 / Math.PI;
+    M.toRad = Math.PI / 180;
+    M.halfPI = Math.PI / 2;
+    M.twoPI = Math.PI * 2;
+    M.dist = (w, h) => Math.sqrt(w * w + h * h);
+    M.pointDist = (x1, y1, x2, y2) => {
+      const dx = x2 - x1, dy = y2 - y1;
+      return Math.sqrt(dx * dx + dy * dy);
+    };
+    M.angle = (w, h) => M.halfPI + Math.atan2(h, w);
+    M.pointAngle = (x1, y1, x2, y2) => M.halfPI + Math.atan2(y2 - y1, x2 - x1);
+    M.splitVector = (speed, angle) => ({ x: Math.sin(angle) * speed, y: -Math.cos(angle) * speed });
+    M.random = (min, max) => Math.random() * (max - min) + min;
+    M.randomInt = (min, max) => ((Math.random() * (max - min + 1)) | 0) + min;
+    M.randomChoice = function (choices) {
+      if (arguments.length === 1 && Array.isArray(choices)) {
+        return choices[(Math.random() * choices.length) | 0];
+      }
+      return arguments[(Math.random() * arguments.length) | 0];
+    };
+    M.clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+    return M;
+  })(Math);
+  window.MyMath = MyMath;
+
+  // Self-healing Ticker helper
+  const Ticker = window.Ticker || (function (window) {
+    const T = {};
+    let started = false;
+    let lastTimestamp = 0;
+    const listeners = [];
+
+    T.addListener = function (callback) {
+      if (typeof callback !== 'function') return;
+      listeners.push(callback);
+      if (!started) {
+        started = true;
+        queueFrame();
+      }
+    };
+
+    function queueFrame() {
+      if (window.requestAnimationFrame) {
+        requestAnimationFrame(frameHandler);
+      } else {
+        setTimeout(() => frameHandler(performance.now()), 16);
+      }
+    }
+
+    function frameHandler(timestamp) {
+      let frameTime = timestamp - lastTimestamp;
+      lastTimestamp = timestamp;
+      if (frameTime < 0) frameTime = 17;
+      else if (frameTime > 68) frameTime = 68;
+      listeners.forEach(l => l.call(window, frameTime, frameTime / 16.6667));
+      queueFrame();
+    }
+
+    return T;
+  })(window);
+  window.Ticker = Ticker;
+
+  // Self-healing Stage abstraction
+  const Stage = window.Stage || (function (window, document, Ticker) {
+    let lastTouchTimestamp = 0;
+
+    function Stage(canvas) {
+      if (typeof canvas === 'string') canvas = document.getElementById(canvas);
+      this.canvas = canvas;
+      this.ctx = canvas.getContext('2d');
+      this.canvas.style.touchAction = 'none';
+      this.speed = 1;
+      this.dpr = Stage.disableHighDPI ? 1 : ((window.devicePixelRatio || 1) / (this.ctx.backingStorePixelRatio || 1));
+      this.width = canvas.width;
+      this.height = canvas.height;
+      this.naturalWidth = this.width * this.dpr;
+      this.naturalHeight = this.height * this.dpr;
+
+      if (this.width !== this.naturalWidth) {
+        this.canvas.width = this.naturalWidth;
+        this.canvas.height = this.naturalHeight;
+        this.canvas.style.width = this.width + 'px';
+        this.canvas.style.height = this.height + 'px';
+      }
+
+      Stage.stages.push(this);
+      this._listeners = {
+        resize: [],
+        pointerstart: [],
+        pointermove: [],
+        pointerend: [],
+        lastPointerPos: { x: 0, y: 0 }
+      };
+    }
+
+    Stage.stages = [];
+    Stage.disableHighDPI = false;
+
+    Stage.prototype.addEventListener = function (event, handler) {
+      if (event === 'ticker') {
+        Ticker.addListener(handler);
+      } else if (this._listeners[event]) {
+        this._listeners[event].push(handler);
+      }
+    };
+
+    Stage.prototype.dispatchEvent = function (event, val) {
+      const listeners = this._listeners[event];
+      if (listeners) {
+        listeners.forEach(l => l.call(this, val));
+      }
+    };
+
+    Stage.prototype.resize = function (w, h) {
+      this.width = w;
+      this.height = h;
+      this.naturalWidth = w * this.dpr;
+      this.naturalHeight = h * this.dpr;
+      this.canvas.width = this.naturalWidth;
+      this.canvas.height = this.naturalHeight;
+      this.canvas.style.width = w + 'px';
+      this.canvas.style.height = h + 'px';
+      this.dispatchEvent('resize');
+    };
+
+    Stage.windowToCanvas = function (canvas, x, y) {
+      const bbox = canvas.getBoundingClientRect();
+      return {
+        x: (x - bbox.left) * (canvas.width / bbox.width),
+        y: (y - bbox.top) * (canvas.height / bbox.height)
+      };
+    };
+
+    Stage.mouseHandler = function (evt) {
+      if (Date.now() - lastTouchTimestamp < 500) return;
+      let type = 'start';
+      if (evt.type === 'mousemove') type = 'move';
+      else if (evt.type === 'mouseup') type = 'end';
+
+      Stage.stages.forEach(stage => {
+        const pos = Stage.windowToCanvas(stage.canvas, evt.clientX, evt.clientY);
+        stage.pointerEvent(type, pos.x / stage.dpr, pos.y / stage.dpr);
+      });
+    };
+
+    Stage.touchHandler = function (evt) {
+      lastTouchTimestamp = Date.now();
+      let type = 'start';
+      if (evt.type === 'touchmove') type = 'move';
+      else if (evt.type === 'touchend') type = 'end';
+
+      Stage.stages.forEach(stage => {
+        for (let touch of Array.from(evt.changedTouches)) {
+          let pos;
+          if (type !== 'end') {
+            pos = Stage.windowToCanvas(stage.canvas, touch.clientX, touch.clientY);
+            stage._listeners.lastPointerPos = pos;
+            if (type === 'start') stage.pointerEvent('move', pos.x / stage.dpr, pos.y / stage.dpr);
+          } else {
+            pos = stage._listeners.lastPointerPos;
+          }
+          stage.pointerEvent(type, pos.x / stage.dpr, pos.y / stage.dpr);
+        }
+      });
+    };
+
+    Stage.prototype.pointerEvent = function (type, x, y) {
+      const evt = { type, x, y };
+      evt.onCanvas = (x >= 0 && x <= this.width && y >= 0 && y <= this.height);
+      this.dispatchEvent('pointer' + type, evt);
+    };
+
+    document.addEventListener('mousedown', Stage.mouseHandler);
+    document.addEventListener('mousemove', Stage.mouseHandler);
+    document.addEventListener('mouseup', Stage.mouseHandler);
+    document.addEventListener('touchstart', Stage.touchHandler, { passive: true });
+    document.addEventListener('touchmove', Stage.touchHandler, { passive: true });
+    document.addEventListener('touchend', Stage.touchHandler, { passive: true });
+
+    return Stage;
+  })(window, document, Ticker);
+  window.Stage = Stage;
+
+  const fscreen = window.fscreen || {};
 
   const IS_MOBILE = window.innerWidth <= 640;
   const IS_DESKTOP = window.innerWidth > 800;
