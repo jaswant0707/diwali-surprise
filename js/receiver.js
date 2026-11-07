@@ -28,11 +28,24 @@
     const giftBox = document.getElementById('gift-box-wrapper');
     const soundBtn = document.getElementById('btn-sound-toggle');
 
+    function onTriggerClick(e) {
+      if (e) e.preventDefault();
+
+      // Synchronously unlock Web Audio API directly in user gesture callstack
+      if (window.FireworksEngine && window.FireworksEngine.unlockAudio) {
+        window.FireworksEngine.unlockAudio();
+      } else if (window.SoundEngine && window.SoundEngine.unlockAudio) {
+        window.SoundEngine.unlockAudio();
+      }
+
+      startCelebration();
+    }
+
     if (openBtn) {
-      openBtn.addEventListener('click', startCelebration);
+      openBtn.addEventListener('click', onTriggerClick);
     }
     if (giftBox) {
-      giftBox.addEventListener('click', startCelebration);
+      giftBox.addEventListener('click', onTriggerClick);
     }
 
     if (soundBtn) {
@@ -103,26 +116,24 @@
       giftBox.classList.add('opening');
     }
 
-    // STEP 2: Transition into celebration
+    // STEP 2: Start original fireworks engine immediately
+    if (window.FireworksEngine) {
+      window.FireworksEngine.start();
+    }
+
+    // STEP 3: Fade invitation screen smoothly
+    const invitationScreen = document.getElementById('invitation-screen');
+    if (invitationScreen) {
+      invitationScreen.classList.add('opened');
+    }
+
+    // STEP 4: Reveal personalized greeting card & bottom CTA
     setTimeout(() => {
-      const invitationScreen = document.getElementById('invitation-screen');
-      if (invitationScreen) {
-        invitationScreen.classList.add('opened');
-      }
-
-      // STEP 3: Start original fireworks engine (unpauses & starts continuous autoLaunch loop)
-      if (window.FireworksEngine) {
-        window.FireworksEngine.start();
-      }
-
-      // STEP 4: Reveal personalized greeting card & bottom CTA
-      setTimeout(() => {
-        const greetingOverlay = document.getElementById('greeting-overlay');
-        const bottomBar = document.getElementById('bottom-bar');
-        if (greetingOverlay) greetingOverlay.classList.add('visible');
-        if (bottomBar) bottomBar.classList.add('visible');
-      }, 500);
-    }, 450);
+      const greetingOverlay = document.getElementById('greeting-overlay');
+      const bottomBar = document.getElementById('bottom-bar');
+      if (greetingOverlay) greetingOverlay.classList.add('visible');
+      if (bottomBar) bottomBar.classList.add('visible');
+    }, 400);
   }
 
   function updateSoundIcon(isMuted) {

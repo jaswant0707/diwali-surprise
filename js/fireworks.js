@@ -167,37 +167,77 @@
       }
     },
 
+    _hasPreloaded: false,
+    _isPreloading: false,
+
     preload() {
+      if (this._hasPreloaded || this._isPreloading) return Promise.resolve();
+      this._isPreloading = true;
       const ctx = getAudioContext();
-      if (!ctx) return Promise.resolve();
+      if (!ctx) {
+        this._isPreloading = false;
+        return Promise.resolve();
+      }
 
       const types = Object.keys(this.sources);
       const allPromises = [];
 
       types.forEach(type => {
         const source = this.sources[type];
+        source.buffers = [];
         source.fileNames.forEach(fileName => {
           const fileURL = this.baseURL + fileName;
           const promise = fetch(fileURL)
-            .then(res => res.arrayBuffer())
+            .then(res => {
+              if (!res.ok) throw new Error(`HTTP ${res.status}`);
+              return res.arrayBuffer();
+            })
             .then(data => new Promise(resolve => {
               ctx.decodeAudioData(data, buffer => {
                 source.buffers.push(buffer);
                 resolve(buffer);
-              }, () => resolve(null));
+              }, (err) => {
+                console.warn('Audio decode error:', fileName, err);
+                resolve(null);
+              });
             }))
-            .catch(() => Promise.resolve(null));
+            .catch((err) => {
+              console.warn('Audio fetch error:', fileName, err);
+              return null;
+            });
           allPromises.push(promise);
         });
       });
 
-      return Promise.all(allPromises);
+      return Promise.all(allPromises).then(() => {
+        this._hasPreloaded = true;
+        this._isPreloading = false;
+      });
+    },
+
+    unlockAudio() {
+      const ctx = getAudioContext();
+      if (ctx) {
+        if (ctx.state === 'suspended') {
+          ctx.resume().catch(e => console.warn('Audio resume error during unlock:', e));
+        }
+        try {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          gain.gain.value = 0.0001;
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(0);
+          osc.stop(ctx.currentTime + 0.01);
+        } catch (e) {}
+      }
+      this.preload();
     },
 
     resumeAll() {
       const ctx = getAudioContext();
       if (ctx && ctx.state === 'suspended') {
-        ctx.resume();
+        ctx.resume().catch(e => console.warn('Audio resume error:', e));
       }
       this.preload();
     },
@@ -205,7 +245,7 @@
     pauseAll() {
       const ctx = getAudioContext();
       if (ctx && ctx.state === 'running') {
-        ctx.suspend();
+        ctx.suspend().catch(e => console.warn('Audio suspend error:', e));
       }
     },
 
@@ -305,7 +345,10 @@
       if (!source) return;
 
       const ctx = getAudioContext();
-      if (!ctx || ctx.state !== 'running') return;
+      if (!ctx) return;
+      if (ctx.state === 'suspended') {
+        ctx.resume().catch(() => {});
+      }
 
       // If decoded audio buffers exist, play them
       if (source.buffers && source.buffers.length > 0) {
@@ -719,26 +762,32 @@
 
   let isFirstSeq = true;
   function startSequence() {
+    const size = shellSizeSelector();
     if (isFirstSeq) {
       isFirstSeq = false;
-      const shell = new Shell(crysanthemumShell(shellSizeSelector()));
-      shell.launch(0.5, 0.5);
-      return 2400;
+      // Grand celebratory opening: 3 multi-color shells burst across left, center, right
+      const shellCenter = new Shell(crysanthemumShell(size));
+      const shellLeft = new Shell(shellFromConfig(size));
+      const shellRight = new Shell(shellFromConfig(size));
+      shellCenter.launch(0.5, 0.7);
+      setTimeout(() => shellLeft.launch(0.25, 0.6), 180);
+      setTimeout(() => shellRight.launch(0.75, 0.6), 360);
+      return 1500;
     }
 
     const rand = Math.random();
-    if (rand < 0.1 && Date.now() - seqSmallBarrage.lastCalled > seqSmallBarrage.cooldown) {
+    if (rand < 0.12 && Date.now() - seqSmallBarrage.lastCalled > seqSmallBarrage.cooldown) {
       return seqSmallBarrage();
     }
-    if (rand < 0.22) {
+    if (rand < 0.28) {
       return seqPyramid();
     }
-    if (rand < 0.6) {
-      return seqRandomShell();
-    } else if (rand < 0.8) {
+    if (rand < 0.55) {
       return seqTwoRandom();
-    } else {
+    } else if (rand < 0.8) {
       return seqTriple();
+    } else {
+      return seqRandomShell();
     }
   }
 
@@ -1144,7 +1193,8 @@
           starDensity: 1.4,
           color: this.pistilColor,
           glitter: 'light',
-          glitterColor: this.pistilColor === COLOR.Gold ? COLOR.Gold : COLOR.White
+          glitterColor: this.pistilColor === COLOR.Gold ? COLOR.Gold : COLOR.White,
+          isSubBurst: true
         });
         innerShell.burst(x, y);
       }
@@ -1156,16 +1206,17 @@
           starLifeVariation: this.starLifeVariation,
           starCount: Math.floor(Math.max(6, this.spreadSize / 45)),
           color: COLOR.White,
-          glitter: 'streamer'
+          glitter: 'streamer',
+          isSubBurst: true
         });
         innerShell.burst(x, y);
       }
 
       BurstFlash.add(x, y, this.spreadSize / 4);
 
-      if (this.comet) {
+      if (!this.isSubBurst) {
         const maxDiff = 2;
-        const sizeDifferenceFromMaxSize = Math.min(maxDiff, shellSizeSelector() - this.shellSize);
+        const sizeDifferenceFromMaxSize = Math.min(maxDiff, shellSizeSelector() - (this.shellSize || 2));
         const soundScale = (1 - sizeDifferenceFromMaxSize / maxDiff) * 0.3 + 0.7;
         soundManager.playSound('burst', soundScale);
       }
@@ -1181,7 +1232,8 @@
     if (store.state.config.autoLaunch) {
       autoLaunchTime -= timeStep;
       if (autoLaunchTime <= 0) {
-        autoLaunchTime = startSequence() * 1.25;
+        const nextCadence = startSequence() * 0.55;
+        autoLaunchTime = Math.max(750, Math.min(2200, nextCadence));
       }
     }
   }
@@ -1471,8 +1523,15 @@
         }
       });
 
+      // Start preloading audio files in background
+      soundManager.preload();
+
       isInitialized = true;
       console.log('✨ Original FireworksEngine initialized successfully.');
+    },
+
+    unlockAudio() {
+      soundManager.unlockAudio();
     },
 
     start() {
@@ -1545,7 +1604,7 @@
   window.FireworksEngine = FireworksEngine;
   window.SoundEngine = {
     playSound: (type, scale) => soundManager.playSound(type, scale),
-    unlockAudio: () => soundManager.resumeAll(),
+    unlockAudio: () => soundManager.unlockAudio(),
     toggleMute: (force) => !FireworksEngine.toggleSound(force === undefined ? undefined : !force)
   };
 })();

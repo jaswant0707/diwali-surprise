@@ -99,3 +99,15 @@
 - [x] Implement canvas pointer/touch interaction allowing users to tap on canvas to launch custom fireworks
 - [x] Complete automated 60-second headless Chrome verification test: 60s continuous celebration, zero console errors, active particles and 60fps frame advancement
 
+## Phase 13: Production Bug Fix — Authoritative Supabase Storage, Audio Unlock & Active Fireworks Pacing
+- [x] Verified problematic UUID `20ddcff2-fd15-4a15-8ab6-7378d6615abf` exists in Supabase (`recipient_name: 'jaswant'`, `personal_message: 'happy diwali'`)
+- [x] Eliminated silent `localStorage` failover in `saveGreeting()`: Supabase cloud storage is strictly authoritative; throw clear user-facing errors on cloud failure instead of generating unshareable local links
+- [x] Added direct Supabase REST API fallback (`querySupabaseRest`) using native `fetch()` to eliminate single-point-of-failure on CDN `@supabase/supabase-js` scripts
+- [x] Added immediate post-insert retrieval verification to guarantee generated links are active before presenting to sender
+- [x] Unlocked Web Audio API synchronously within the direct user gesture callstack (`btn-open-surprise` and `gift-box-wrapper`) to eliminate mobile browser autoplay suspensions
+- [x] Added preload deduplication guard (`_hasPreloaded`, `_isPreloading`) in `soundManager` to prevent duplicate buffer decoding on repeated `resumeAll()` invocations
+- [x] Guaranteed explosion sound playback for all primary firework bursts via `!this.isSubBurst` check
+- [x] Accelerated autoLaunch cadence from 3-4s down to 750-2200ms with a 3-shell celebratory opening burst for a lively, non-stop Diwali fireworks show
+- [x] Verified complete flow with automated end-to-end tests: 0 console errors, high particle activity (>5000 sparks, >1200 stars), and responsive mobile ergonomics
+
+

@@ -7,3 +7,4 @@ node_modules/
 .env.*.local
 debug_*.js
 test_*.js
+check_*.js
